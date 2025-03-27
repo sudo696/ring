@@ -19,7 +19,6 @@
 #include <util/strencodings.h>  // Ring-fork: Hive
 #include <logging.h>            // Ring-fork: Hive
 #include <key_io.h>             // Ring-fork: Hive
-#include <crypto/pop/game0/game0.h>   // Ring-fork: Pop
 #include <randomx.h> // Include RandomX header
 
 DwarfPopGraphPoint dwarfPopGraph[1024*40];       // Ring-fork: Hive
@@ -42,8 +41,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return bnPowLimit.GetCompact();
 
     // Ring-fork: Hive: Skip over Hivemined blocks at tip
-    // Ring-fork: Pop: Skip over pop blocks at tip too
-    while (pindexLast->GetBlockHeader().IsHiveMined(params) || pindexLast->GetBlockHeader().IsPopMined(params)) {
+    while (pindexLast->GetBlockHeader().IsHiveMined(params)) {
         //LogPrintf("Skipping hivemined block at %i\n", pindex->nHeight);
         assert(pindexLast->pprev); // should never fail
         pindexLast = pindexLast->pprev;
@@ -54,8 +52,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     for (unsigned int i = 1; i <= nPastBlocks; i++) {
         // Ring-fork: Hive: Skip over Hivemined blocks; we only want to consider PoW blocks
-        // Ring-fork: Pop: Skip over pop blocks too
-        while (pindex->GetBlockHeader().IsHiveMined(params) || pindex->GetBlockHeader().IsPopMined(params)) {
+        while (pindex->GetBlockHeader().IsHiveMined(params)) {
             //LogPrintf("Skipping popmined block at %i\n", pindex->nHeight);
             assert(pindex->pprev); // should never fail
             pindex = pindex->pprev;
@@ -88,27 +85,6 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     return bnNew.GetCompact();
 }
 
-// Ring-fork: Pop: Game score target adjust
-int GetNextPopScoreRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
-    int intScaler = params.popScoreAdjustWindowSize * params.popScoreAdjustWindowSize;
-    int minScore = params.popMinScoreTarget * intScaler;
-    int maxScore = params.popMaxScoreTarget * intScaler;
-
-    int score = 0;
-    for (int i = 0; i < params.popScoreAdjustWindowSize; i++) {
-        if (pindexLast->GetBlockHeader().IsPopMined(params))
-            score++;
-
-        assert (pindexLast->pprev);
-        pindexLast = pindexLast->pprev;
-    }
-
-    score *= score;
-    score = minScore + (score * (maxScore - minScore) / intScaler);
-    score /= intScaler;
-
-    return score;
-}
 
 // Ring-fork: Hive: SMA Hive Difficulty Adjust
 unsigned int GetNextHiveWorkRequired(const CBlockIndex* pindexLast, const Consensus::Params& params) {
@@ -124,8 +100,7 @@ unsigned int GetNextHiveWorkRequired(const CBlockIndex* pindexLast, const Consen
             dwarfHashTarget += arith_uint256().SetCompact(pindexLast->nBits);
             hiveBlockCount++;
         }
-        if (!pindexLast->GetBlockHeader().IsPopMined(params))
-            totalBlockCount++;
+        totalBlockCount++;
 
         pindexLast = pindexLast->pprev;
     }
@@ -204,7 +179,6 @@ bool GetNetworkHiveInfo(int& immatureDwarves, int& immatureDCTs, int& matureDwar
         }
 
         if (!pindexPrev->GetBlockHeader().IsHiveMined(consensusParams)      // Don't check Hivemined blocks (no DCTs will be found in them)
-            && !pindexPrev->GetBlockHeader().IsPopMined(consensusParams)    // Ring-fork: Pop: Same for pop blocks
         ) {
             if (!ReadBlockFromDisk(block, pindexPrev, consensusParams, false)) {
                 LogPrintf("! GetNetworkHiveInfo: Warn: Block not available (not found on disk); can't calculate network dwarf count.");
@@ -292,9 +266,8 @@ bool CheckHiveProof(const CBlock* pblock, const Consensus::Params& consensusPara
     // Check that there aren't too many Hive blocks since the last Pow block
     int hiveBlocksSincePow = 0;
     CBlockIndex* pindexTemp = pindexPrev;
-    while (pindexTemp->GetBlockHeader().IsPopMined(consensusParams) || pindexTemp->GetBlockHeader().IsHiveMined(consensusParams)) {
-        if (pindexTemp->GetBlockHeader().IsHiveMined(consensusParams))
-            hiveBlocksSincePow++;
+    while (pindexTemp->GetBlockHeader().IsHiveMined(consensusParams)) {
+        hiveBlocksSincePow++;
 
         assert(pindexTemp->pprev);
         pindexTemp = pindexTemp->pprev;
@@ -549,197 +522,7 @@ bool CheckHiveProof(const CBlock* pblock, const Consensus::Params& consensusPara
     return true;
 }
 
-// Ring-fork: Pop: Check the pop proof for given block
-bool CheckPopProof(const CBlock* pblock, const Consensus::Params& consensusParams, bool checkActiveChain) {
-    bool verbose = LogAcceptCategory(BCLog::POP);
-
-    if (verbose)
-        LogPrintf("********************* Pop: CheckPopProof *********************\n");
-
-    // Get height (a CBlockIndex isn't always available when this func is called, eg in reads from disk)
-    int blockHeight;
-    CBlockIndex* pindexPrev;
-    {
-        LOCK(cs_main);
-        pindexPrev = mapBlockIndex[pblock->hashPrevBlock];
-        blockHeight = pindexPrev->nHeight + 1;
-    }
-    if (!pindexPrev) {
-        LogPrintf("CheckPopProof: Couldn't get previous block's CBlockIndex!\n");
-        return false;
-    }
-    if (verbose)
-        LogPrintf("CheckPopProof: nHeight              = %i\n", blockHeight);
-
-    // Block mustn't include any DCTs
-    CScript scriptPubKeyBCF = GetScriptForDestination(DecodeDestination(consensusParams.dwarfCreationAddress));
-    if (pblock->vtx.size() > 1)
-        for (unsigned int i=1; i < pblock->vtx.size(); i++)
-            if (pblock->vtx[i]->IsDCT(consensusParams, scriptPubKeyBCF)) {
-                LogPrintf("CheckPopProof: Popmined block contains DCTs!\n");
-                return false;
-            }
-
-    // Coinbase tx must be valid
-    CTransactionRef txCoinbase = pblock->vtx[0];
-    if (!txCoinbase->IsCoinBase()) {
-        LogPrintf("CheckPopProof: Coinbase tx isn't valid!\n");
-        return false;
-    }
-
-    // Must have exactly 2 or 3 outputs
-    if (txCoinbase->vout.size() < 2 || txCoinbase->vout.size() > 3) {
-        LogPrintf("CheckPopProof: Didn't expect %i vouts!\n", txCoinbase->vout.size());
-        return false;
-    }
-
-    // vout[0] must be long enough to contain all encodings for public or private
-    if (txCoinbase->vout[0].scriptPubKey.size() < 42 || (txCoinbase->vout[0].scriptPubKey[36] == OP_TRUE && txCoinbase->vout[0].scriptPubKey.size() < 108)) {
-        LogPrintf("CheckPopProof: vout[0].scriptPubKey isn't long enough to contain pop proof encodings\n");
-        return false;
-    }
-
-    // vout[1] must start OP_RETURN OP_GAME (bytes 0-1)
-    if (txCoinbase->vout[0].scriptPubKey[0] != OP_RETURN || txCoinbase->vout[0].scriptPubKey[1] != OP_GAME) {
-        LogPrintf("CheckPopProof: vout[0].scriptPubKey doesn't start OP_RETURN OP_GAME\n");
-        return false;
-    }
-
-    // Grab the game type
-    uint8_t gameType = txCoinbase->vout[0].scriptPubKey[2];
-    if (gameType != 0) {
-        LogPrintf("CheckPopProof: Got gametype = %d. Only game type 0 currently supported\n", gameType);
-        return false;
-    }
-
-    // Grab the source block hash (32 bytes at byte 4 -- byte 3 has val 32 as size marker)
-    uint256 gameSourceHashBin;
-    gameSourceHashBin.SetHex(HexStr(&txCoinbase->vout[0].scriptPubKey[4], &txCoinbase->vout[0].scriptPubKey[4 + 32]));
-    std::string gameSourceHashStr = gameSourceHashBin.ToString();
-    if (verbose)
-        LogPrintf("CheckPopProof: gameSourceHash       = %s\n", gameSourceHashStr);
-
-    // Get public/private claim
-    bool isPrivate = txCoinbase->vout[0].scriptPubKey[36] == OP_TRUE;
-    if (verbose)
-        LogPrintf("CheckPopProof: isPrivate            = %s\n", isPrivate ? "true" : "false");
-
-    // Grab the source block
-    CBlockIndex* pindexSourceBlock = mapBlockIndex[uint256S(gameSourceHashStr)];
-    if (!pindexSourceBlock) {
-        LogPrintf("CheckPopProof: Couldn't find claimed source block\n");
-        return false;
-    }
-
-    // Check claimed source block is in active chain
-    if (checkActiveChain && !chainActive.Contains(pindexSourceBlock)) {
-        LogPrintf("CheckPopProof: Claimed source block is not in active chain\n");
-        return false;
-    }
-
-    CBlock sourceBlock;
-    if (!ReadBlockFromDisk(sourceBlock, pindexSourceBlock, Params().GetConsensus(), false)) {
-        LogPrintf("CheckPopProof: Couldn't read source block\n");
-        return false;
-    }
-
-    // Make sure it's hivemined
-    if (!sourceBlock.GetBlockHeader().IsHiveMined(consensusParams)) {
-        LogPrintf("CheckPopProof: Source block isn't hivemined!\n");
-        return false;
-    }
-
-    // Make sure it's within valid depth range
-    int sourceBlockHeight = pindexSourceBlock->nHeight;
-    int depth = blockHeight - sourceBlockHeight;
-    if (isPrivate) {
-        if (depth < consensusParams.popMinPrivateGameDepth || depth > consensusParams.popMaxPrivateGameDepth) {
-            LogPrintf("CheckPopProof: Source block is out of private claim range\n");
-            return false;
-        }
-    } else {
-        if (depth < consensusParams.popMaxPrivateGameDepth || depth > consensusParams.popMaxPublicGameDepth) {
-            LogPrintf("CheckPopProof: Source block is out of public claim range\n");
-            return false;
-        }
-    }
-
-    // Grab source block's reward destination
-    CTxDestination rewardSourceBlock;
-    if (!ExtractDestination(sourceBlock.vtx[0]->vout[1].scriptPubKey, rewardSourceBlock) || !IsValidDestination(rewardSourceBlock)) {
-        LogPrintf("CheckPopProof: Couldn't extract source block reward destination\n");
-        return false;
-    }
-
-    // Verify private claim if needed
-    if (isPrivate) {
-        // Grab message proof
-        std::vector<unsigned char> messageSig(&txCoinbase->vout[0].scriptPubKey[38], &txCoinbase->vout[0].scriptPubKey[38 + 65]);
-        if (verbose)
-            LogPrintf("CheckPopProof: messageSig           = %s\n", HexStr(&messageSig[0], &messageSig[messageSig.size()]));
-
-        // Verify the message sig
-        const CKeyID *keyID = boost::get<CKeyID>(&rewardSourceBlock);
-        if (!keyID) {
-            LogPrintf("CheckPopProof: Can't get pubkey for reward address\n");
-            return false;
-        }
-        std::string deterministicRandString = GetDeterministicRandString(pindexPrev);
-        if (verbose)
-            LogPrintf("CheckPopProof: detRandString        = %s\n", deterministicRandString);
-
-        CHashWriter ss(SER_GETHASH, 0);
-        ss << deterministicRandString;
-        uint256 mhash = ss.GetHash();
-        CPubKey pubkey;
-        if (!pubkey.RecoverCompact(mhash, messageSig)) {
-            LogPrintf("CheckPopProof: Couldn't recover pubkey from hash\n");
-            return false;
-        }
-        if (pubkey.GetID() != *keyID) {
-            LogPrintf("CheckPopProof: Signature mismatch! GetID() = %s, *keyID = %s\n", pubkey.GetID().ToString(), (*keyID).ToString());
-            return false;
-        }
-    }
-
-    // Grab solution
-    unsigned int solutionStart = isPrivate ? 104 : 38;
-    std::vector<unsigned char> solution(&txCoinbase->vout[0].scriptPubKey[solutionStart], &txCoinbase->vout[0].scriptPubKey[txCoinbase->vout[0].scriptPubKey.size()]);
-    if (verbose)
-        LogPrintf("CheckPopProof: solution             = %s\n", HexStr(&solution[0], &solution[solution.size()]));
-
-    // Verify it's a valid game solution
-    std::string strError;
-    Game0 game0;
-    if (!game0.VerifyGameSolution(GetNextPopScoreRequired(pindexPrev, consensusParams), gameSourceHashBin, solution, strError)) {
-        LogPrintf("CheckPopProof: Invalid solution: %s\n", strError);
-        return false;
-    }
-
-    // Make sure this gameSourceHash hasn't been claimed before
-    CBlockIndex *pblockindex = pindexPrev;
-    while (pblockindex->nHeight > sourceBlockHeight) {
-        if (pblockindex->GetBlockHeader().IsPopMined(consensusParams)) {
-            CBlock block;
-            if (ReadBlockFromDisk(block, pblockindex, consensusParams, false)) {
-                uint256 tempGameSourceHashBin;
-                tempGameSourceHashBin.SetHex(HexStr(&block.vtx[0]->vout[0].scriptPubKey[4], &block.vtx[0]->vout[0].scriptPubKey[4+32]));
-
-                if (gameSourceHashBin == tempGameSourceHashBin) {
-                    LogPrintf("CheckPopProof: Game is already claimed in block %s (height %i).\n", pblockindex->GetBlockHash().ToString(), pblockindex->nHeight);
-                    return false;
-                }
-            }
-        }
-
-        assert(pblockindex->pprev);
-        pblockindex = pblockindex->pprev;
-    }
-
-    if (verbose)
-        LogPrintf("CheckPopProof: Pass at %i\n", blockHeight);
-    return true;
-}
+// POP validation removed
 
 bool static ScanHash(CBlockHeader *pblock, uint32_t& nNonce, uint256 *phash) {
     uint256 hash;

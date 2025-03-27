@@ -3127,14 +3127,7 @@ bool CWallet::SubmitSolution(CAvailableGame *game, uint8_t gameType, std::vector
     return true;
 }
 
-// Ring-fork: Pop: Return all games valid to be played by this wallet
-std::vector<CAvailableGame> CWallet::GetAvailableGames(const Consensus::Params& consensusParams) {
-    std::vector<CAvailableGame> games;
-    
-    if (chainActive.Height() < consensusParams.popMaxPublicGameDepth) {
-        LogPrintf("CWallet::GetAvailableGames: Chain height is below popMaxPublicGameDepth\n");
-        return games;
-    }
+// POP game functionality removed
 
     // Grab potential private games
     std::unordered_map<std::string, CAvailableGame> potentialGames;

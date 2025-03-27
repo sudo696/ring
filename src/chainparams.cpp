@@ -149,15 +149,7 @@ public:
         consensus.maxConsecutiveHiveBlocks = 2;             // Maximum hive blocks that can occur consecutively before a PoW block is required
         consensus.hiveDifficultyWindow = 36;                // How many blocks the SMA averages over in hive difficulty adjust
 
-        // Ring-fork: Pop: Consensus fields
-        consensus.popBlocksPerHive = 1;                     // Expected number of pop blocks per Hive block. Note that increasing this here is not enough to spawn additional games, etc; this is used for time estimations.
-        consensus.popNonceMarker = 2;                       // Nonce marker for popmined blocks
-        consensus.popMinPrivateGameDepth = COINBASE_MATURITY;                           // Private game source transactions must be at least this many blocks deep
-        consensus.popMaxPrivateGameDepth = consensus.popMinPrivateGameDepth + 50;       // Private game source transactions must be at most this many blocks deep
-        consensus.popMaxPublicGameDepth = consensus.popMaxPrivateGameDepth + 200;       // Public game source transactions must be at most this many blocks deep
-        consensus.popScoreAdjustWindowSize = 24;            // Windows size for adjusting pop score target
-        consensus.popMinScoreTarget = 70;                   // Min score target
-        consensus.popMaxScoreTarget = 210;                  // Max score target
+        // POP module removed
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S(LAST_ID_CHAINWORK);                  // At lastInitialDistributionHeight
@@ -311,15 +303,7 @@ public:
         consensus.maxConsecutiveHiveBlocks = 2;             // Maximum hive blocks that can occur consecutively before a PoW block is required
         consensus.hiveDifficultyWindow = 36;                // How many blocks the SMA averages over in hive difficulty adjust
 
-        // Ring-fork: Pop: Consensus fields
-        consensus.popBlocksPerHive = 1;                     // Expected number of pop blocks per Hive block. Note that increasing this here is not enough to spawn additional games, etc; this is used for time estimations.
-        consensus.popNonceMarker = 2;                       // Nonce marker for popmined blocks
-        consensus.popMinPrivateGameDepth = COINBASE_MATURITY;                           // Private game source transactions must be at least this many blocks deep
-        consensus.popMaxPrivateGameDepth = consensus.popMinPrivateGameDepth + 50;       // Private game source transactions must be at most this many blocks deep
-        consensus.popMaxPublicGameDepth = consensus.popMaxPrivateGameDepth + 200;       // Public game source transactions must be at most this many blocks deep
-        consensus.popScoreAdjustWindowSize = 24;            // Windows size for adjusting pop score target
-        consensus.popMinScoreTarget = 70;                   // Min score target
-        consensus.popMaxScoreTarget = 210;                  // Max score target
+        // POP module removed
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x1304303f1de");    // 5400
