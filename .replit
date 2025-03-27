@@ -2,3 +2,14 @@ modules = ["cpp-clang14", "c-clang14", "python-3.12"]
 
 [nix]
 channel = "stable-24_05"
+
+[workflows]
+
+[[workflows.workflow]]
+name = "Run Mining Test"
+author = 40780329
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 test/functional/mining_dwc_test.py"
