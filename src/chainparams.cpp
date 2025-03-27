@@ -73,7 +73,7 @@ public:
         consensus.BIP65Height = 1;                      // BIP65 & 66 active since start
         consensus.BIP66Height = 1;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nPowTargetSpacing = 90;               // Targeting 1 pow block (3 blocks across all types) in this many seconds
+        consensus.nPowTargetSpacing = 300;               // Targeting 1 pow block (3 blocks across all types) in this many seconds (5 minutes)
         consensus.nExpectedBlockSpacing = consensus.nPowTargetSpacing / 3;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
