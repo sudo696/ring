@@ -393,8 +393,8 @@ void RingGUI::createActions()
     tabGroup->addAction(miningAction);
 
     // Ring-fork: Hive: Hive page
-    hiveAction = new QAction(platformStyle->SingleColorIcon(":/icons/hiveicon"), tr("Hive Mining"), this);
-    hiveAction->setStatusTip(tr("Show Hive Mining page"));
+    hiveAction = new QAction(platformStyle->SingleColorIcon(":/icons/hiveicon"), tr("RNG Mining"), this);
+    hiveAction->setStatusTip(tr("Show RNG Mining page"));
     hiveAction->setToolTip(hiveAction->statusTip());
     hiveAction->setCheckable(true);
     hiveAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));

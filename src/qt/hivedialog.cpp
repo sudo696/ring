@@ -84,7 +84,7 @@ void HiveDialog::setModel(WalletModel *_model) {
         connect(_model, &WalletModel::balanceChanged, this, &HiveDialog::setBalance);
         connect(_model->getOptionsModel(), &OptionsModel::displayUnitChanged, this, &HiveDialog::updateDisplayUnit);
         updateDisplayUnit();
-        
+
         if (_model->getEncryptionStatus() != WalletModel::Locked)
             ui->releaseSwarmButton->hide();
         connect(_model, SIGNAL(encryptionStatusChanged(int)), this, SLOT(setEncryptionStatus(int)));
@@ -163,7 +163,7 @@ void HiveDialog::updateData(bool forceGlobalSummaryUpdate) {
         ui->globalHiveSummaryError->show();
         return;
     }
-    
+
     const Consensus::Params& consensusParams = Params().GetConsensus();
 
     if(model && model->getHiveTableModel()) {
@@ -252,7 +252,7 @@ void HiveDialog::updateData(bool forceGlobalSummaryUpdate) {
         if (dwarfPopIndex > 200) dwarfPopIndex = 200;
         ui->dwarfPopIndexLabel->setText(QString::number(floor(dwarfPopIndex)));
         ui->dwarfPopIndexPie->setValue(dwarfPopIndex / 100);
-        
+
         lastGlobalCheckHeight = chainActive.Tip()->nHeight;
     }
 
@@ -278,7 +278,7 @@ void HiveDialog::updateTotalCostDisplay() {
 
     if(model && model->getOptionsModel()) {
         setAmountField(ui->totalCostLabel, totalCost);
-        
+
         interfaces::WalletBalances balances = model->wallet().getBalances();
         if (totalCost > balances.balance)
             ui->dwarfCountSpinner->setStyleSheet("QSpinBox{background:#FF8080;}");
@@ -394,7 +394,7 @@ void HiveDialog::initGraph() {
 
     globalMarkerLine = new QCPItemLine(ui->dwarfPopGraph);
     globalMarkerLine->setPen(QPen(Qt::blue, 1, Qt::DashLine));
-    
+
     graphTracerImmature = new QCPItemTracer(ui->dwarfPopGraph);
     graphTracerImmature->setGraph(ui->dwarfPopGraph->graph(0));
     graphTracerMature = new QCPItemTracer(ui->dwarfPopGraph);
@@ -474,7 +474,7 @@ void HiveDialog::onMouseMove(QMouseEvent *event) {
     else
         pixelPos.setX(pixelPos.x() + xoffs);
 
-    
+
     graphMouseoverText->position->setPixelPosition(pixelPos);
 
     customPlot->replot();

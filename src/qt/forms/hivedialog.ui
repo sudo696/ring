@@ -38,7 +38,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Create Dwarves</string>
+        <string>Burn DWC</string>
        </property>
       </widget>
      </item>
@@ -64,7 +64,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&lt;a href=&quot;https://hive.litecoinca.sh/guide/&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#f19015;&quot;&gt;Please learn about hive mining before creating dwarves&lt;/span&gt;&lt;/a&gt;</string>
+        <string>&lt;a href=&quot;https://hive.litecoinca.sh/guide/&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#f19015;&quot;&gt;Please learn about RNG mining before burning DWC&lt;/span&gt;&lt;/a&gt;</string>
        </property>
        <property name="openExternalLinks">
         <bool>true</bool>
@@ -125,7 +125,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="currentDwarfCostLabel_2">
         <property name="text">
-         <string>Dwarf cost:</string>
+         <string>DWC amount:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -153,7 +153,7 @@
            </font>
           </property>
           <property name="text">
-           <string>0 RNG</string>
+           <string>0 DWC</string>
           </property>
          </widget>
         </item>
@@ -175,7 +175,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="dwarvesToCreateLabel_2">
         <property name="text">
-         <string>Dwarves to create:</string>
+         <string>Votes to cast:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -221,7 +221,7 @@
            <string>The community fund works by diverting a portion of the unspendable dwarf creation fee to the spendable community fund address. This enables us to keep developing Ring.</string>
           </property>
           <property name="text">
-           <string>Send 20% of dwarf fee to Community Fund (Dwarf price remains the same and you still get the same number of dwarves)</string>
+           <string>Send 20% of DWC fee to Community Fund (DWC price remains the same and you still get the same number of votes)</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -246,7 +246,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="totalCostLabel_3">
         <property name="text">
-         <string>Total cost:</string>
+         <string>Total DWC:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -264,7 +264,7 @@
            </font>
           </property>
           <property name="text">
-           <string>0 RNG</string>
+           <string>0 DWC</string>
           </property>
          </widget>
         </item>
@@ -301,10 +301,10 @@
            </size>
           </property>
           <property name="toolTip">
-           <string>Create dwarves now. You will be shown a confirmation dialogue including final transaction fees.</string>
+           <string>Burn DWC now. You will be shown a confirmation dialogue including final transaction fees.</string>
           </property>
           <property name="text">
-           <string>Create dwarves</string>
+           <string>Burn DWC</string>
           </property>
          </widget>
         </item>
@@ -323,24 +323,24 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>Click to unlock your wallet so that your dwarves can work. Note this only unlocks the wallet for hivemining; you must
+           <string>Click to unlock your wallet so that your votes can be cast. Note this only unlocks the wallet for RNG mining; you must
 still fully unlock it to send funds.</string>
           </property>
           <property name="styleSheet">
            <string notr="true">color:red;</string>
           </property>
           <property name="text">
-           <string>Unlock wallet for hive and pop</string>
+           <string>Unlock wallet for RNG mining</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="showHiveOptionsButton">
           <property name="toolTip">
-           <string>Open the Options dialog on the Hive Options tab</string>
+           <string>Open the Options dialog on the RNG Options tab</string>
           </property>
           <property name="text">
-           <string>Hive mining options</string>
+           <string>RNG mining options</string>
           </property>
          </widget>
         </item>
@@ -370,7 +370,7 @@ still fully unlock it to send funds.</string>
            </font>
           </property>
           <property name="text">
-           <string>0 RNG</string>
+           <string>0 DWC</string>
           </property>
          </widget>
         </item>
@@ -450,7 +450,7 @@ still fully unlock it to send funds.</string>
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Network hive summary not yet generated.</string>
+         <string>Network RNG summary not yet generated.</string>
         </property>
        </widget>
       </item>
@@ -463,7 +463,7 @@ still fully unlock it to send funds.</string>
          </size>
         </property>
         <property name="toolTip">
-         <string>Attempt to generate global network hive stats now</string>
+         <string>Attempt to generate global network RNG stats now</string>
         </property>
         <property name="text">
          <string>Generate Now</string>
@@ -519,7 +519,7 @@ still fully unlock it to send funds.</string>
            </font>
           </property>
           <property name="text">
-           <string>Global Dwarf Army</string>
+           <string>Global Vote Power</string>
           </property>
          </widget>
         </item>
@@ -554,7 +554,7 @@ still fully unlock it to send funds.</string>
            <enum>Qt::StrongFocus</enum>
           </property>
           <property name="toolTip">
-           <string>If ticked, advanced global network hive stats will be displayed</string>
+           <string>If ticked, advanced global network RNG stats will be displayed</string>
           </property>
           <property name="text">
            <string>Show population graph</string>
@@ -596,10 +596,10 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="label_6">
            <property name="toolTip">
-            <string>The total number of immature dwarves across the whole network</string>
+            <string>The total number of immature votes across the whole network</string>
            </property>
            <property name="text">
-            <string>Immature dwarves: </string>
+            <string>Immature votes: </string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -609,7 +609,7 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="globalImmatureLabel">
            <property name="toolTip">
-            <string>The total number of immature dwarves across the whole network</string>
+            <string>The total number of immature votes across the whole network</string>
            </property>
            <property name="text">
             <string>0</string>
@@ -635,10 +635,10 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="label_12">
            <property name="toolTip">
-            <string>The total number of mature dwarves across the whole network</string>
+            <string>The total number of mature votes across the whole network</string>
            </property>
            <property name="text">
-            <string>Mature dwarves: </string>
+            <string>Mature votes: </string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -648,7 +648,7 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="globalMatureLabel">
            <property name="toolTip">
-            <string>The total number of mature dwarves across the whole network</string>
+            <string>The total number of mature votes across the whole network</string>
            </property>
            <property name="text">
             <string>0</string>
@@ -674,7 +674,7 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="label_11">
            <property name="toolTip">
-            <string>The total block rewards available on the network over the lifespan of a single dwarf</string>
+            <string>The total block rewards available on the network over the lifespan of a single vote</string>
            </property>
            <property name="text">
             <string>Reward pot: </string>
@@ -687,7 +687,7 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="potentialRewardsLabel">
            <property name="toolTip">
-            <string>The total block rewards available on the network over the lifespan of a single dwarf</string>
+            <string>The total block rewards available on the network over the lifespan of a single vote</string>
            </property>
            <property name="text">
             <string>0</string>
@@ -713,9 +713,9 @@ still fully unlock it to send funds.</string>
          <item>
           <widget class="QLabel" name="label_16">
            <property name="toolTip">
-            <string>The Global Index is a measure of network dwarf population. At a value of 100,
-the network is saturated with the maximum number of dwarves that are expected
-to make back their cost. At values below 100, it is expected at all dwarves will be profitable.</string>
+            <string>The Global Index is a measure of network vote population. At a value of 100,
+the network is saturated with the maximum number of votes that are expected
+to make back their cost. At values below 100, it is expected at all votes will be profitable.</string>
            </property>
            <property name="text">
             <string>&lt;a href=&quot;https://hive.litecoinca.sh/gi/&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#f19015;&quot;&gt;Global index&lt;/span&gt;&lt;/a&gt;: </string>
@@ -731,9 +731,9 @@ to make back their cost. At values below 100, it is expected at all dwarves will
          <item>
           <widget class="QLabel" name="dwarfPopIndexLabel">
            <property name="toolTip">
-            <string>The Global Index is a measure of network dwarf population. At a value of 100,
-the network is saturated with the maximum number of dwarves that are expected
-to make back their cost. At values below 100, it is expected at all dwarves will be profitable.</string>
+            <string>The Global Index is a measure of network vote population. At a value of 100,
+the network is saturated with the maximum number of votes that are expected
+to make back their cost. At values below 100, it is expected at all votes will be profitable.</string>
            </property>
            <property name="text">
             <string>0</string>
@@ -771,9 +771,9 @@ to make back their cost. At values below 100, it is expected at all dwarves will
             </size>
            </property>
            <property name="toolTip">
-            <string>The Global Index is a measure of network dwarf population. At a value of 100,
-the network is saturated with the maximum number of dwarves that are expected
-to make back their cost. At values below 100, it is expected at all dwarves will be profitable.</string>
+            <string>The Global Index is a measure of network vote population. At a value of 100,
+the network is saturated with the maximum number of votes that are expected
+to make back their cost. At values below 100, it is expected at all votes will be profitable.</string>
            </property>
           </widget>
          </item>
@@ -793,7 +793,7 @@ to make back their cost. At values below 100, it is expected at all dwarves will
          <item>
           <widget class="QLabel" name="label_13">
            <property name="toolTip">
-            <string>Global network hive stats are automatically refreshed every 10 blocks</string>
+            <string>Global network RNG stats are automatically refreshed every 10 blocks</string>
            </property>
            <property name="text">
             <string>Refresh: </string>
@@ -816,7 +816,7 @@ to make back their cost. At values below 100, it is expected at all dwarves will
          <item>
           <widget class="QLabel" name="label_15">
            <property name="toolTip">
-            <string>Global network hive stats are automatically refreshed every 10 blocks</string>
+            <string>Global network RNG stats are automatically refreshed every 10 blocks</string>
            </property>
            <property name="text">
             <string> blocks </string>
@@ -835,7 +835,7 @@ to make back their cost. At values below 100, it is expected at all dwarves will
             </size>
            </property>
            <property name="toolTip">
-            <string>Refresh global hive stats now</string>
+            <string>Refresh global RNG stats now</string>
            </property>
            <property name="text">
             <string>Refresh</string>
@@ -900,7 +900,7 @@ to make back their cost. At values below 100, it is expected at all dwarves will
            </font>
           </property>
           <property name="text">
-           <string>Your Dwarf Army</string>
+           <string>Your Vote Power</string>
           </property>
          </widget>
         </item>
@@ -935,17 +935,16 @@ to make back their cost. At values below 100, it is expected at all dwarves will
            <enum>Qt::StrongFocus</enum>
           </property>
           <property name="toolTip">
-           <string>If ticked, your hive display and summary will include dwarves that have expired as well as dwarves that are currently living.</string>
+           <string>If ticked, your RNG display and summary will include expired votes as well as votes that are currently active.</string>
           </property>
           <property name="text">
-           <string>Include expired dwarves</string>
+           <string>Include expired votes</string>
           </property>
           <property name="checked">
            <bool>false</bool>
           </property>
          </widget>
-        </item>
-       </layout>
+        </item       </layout>
       </item>
       <item>
        <widget class="QTableView" name="currentHiveView">
@@ -971,12 +970,12 @@ to make back their cost. At values below 100, it is expected at all dwarves will
         <item>
          <widget class="QLabel" name="label_14">
           <property name="toolTip">
-           <string>Hive Weight = is your hive population / global hive population. 
-This represents how much of the global hive you control as well as
-your hive's chance of mining any given hivemineable block.</string>
+           <string>Vote Weight = is your vote power / global vote power. 
+This represents how much of the global vote power you control as well as
+your vote's chance of influencing any given block.</string>
           </property>
           <property name="text">
-           <string>Hive weight:</string>
+           <string>Vote weight:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -986,9 +985,9 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="localHiveWeightLabel">
           <property name="toolTip">
-           <string>Hive Weight = is your hive population / global hive population. 
-This represents how much of the global hive you control as well as
-your hive's chance of mining any given hivemineable block.</string>
+           <string>Vote Weight = is your vote power / global vote power. 
+This represents how much of the global vote power you control as well as
+your vote's chance of influencing any given block.</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -1010,9 +1009,9 @@ your hive's chance of mining any given hivemineable block.</string>
            </size>
           </property>
           <property name="toolTip">
-           <string>Hive Weight = is your hive population / global hive population. 
-This represents how much of the global hive you control as well as
-your hive's chance of mining any given hivemineable block.</string>
+           <string>Vote Weight = is your vote power / global vote power. 
+This represents how much of the global vote power you control as well as
+your vote's chance of influencing any given block.</string>
           </property>
          </widget>
         </item>
@@ -1035,7 +1034,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="label">
           <property name="toolTip">
-           <string>Current number of immature dwarves in your hive</string>
+           <string>Current number of immature votes in your vote power</string>
           </property>
           <property name="text">
            <string>Immature:</string>
@@ -1048,7 +1047,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="immatureLabel">
           <property name="toolTip">
-           <string>Current number of immature dwarves in your hive</string>
+           <string>Current number of immature votes in your vote power</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -1074,7 +1073,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="label_3">
           <property name="toolTip">
-           <string>Current number of mature dwarves in your hive</string>
+           <string>Current number of mature votes in your vote power</string>
           </property>
           <property name="text">
            <string>Mature:</string>
@@ -1087,7 +1086,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="matureLabel">
           <property name="toolTip">
-           <string>Current number of mature dwarves in your hive</string>
+           <string>Current number of mature votes in your vote power</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -1113,7 +1112,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="deadTitleLabel">
           <property name="toolTip">
-           <string>Current number of expired dwarves in your hive</string>
+           <string>Current number of expired votes in your vote power</string>
           </property>
           <property name="text">
            <string>Expired:</string>
@@ -1126,46 +1125,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="deadLabel">
           <property name="toolTip">
-           <string>Current number of expired dwarves in your hive</string>
-          </property>
-          <property name="text">
-           <string>0</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_15">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>10</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="toolTip">
-           <string>The number of blocks hivemined by your dwarves</string>
-          </property>
-          <property name="text">
-           <string>Blocks found:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="blocksFoundLabel">
-          <property name="toolTip">
-           <string>The number of blocks hivemined by your dwarves</string>
+           <string>Current number of expired votes in your vote power</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -1191,7 +1151,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="label_10">
           <property name="toolTip">
-           <string>Total dwarf cost of your hive</string>
+           <string>Total DWC cost of your vote power</string>
           </property>
           <property name="text">
            <string>Cost:</string>
@@ -1204,7 +1164,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="costLabel">
           <property name="toolTip">
-           <string>Total dwarf cost of your hive</string>
+           <string>Total DWC cost of your vote power</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -1230,7 +1190,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="label_5">
           <property name="toolTip">
-           <string>Total block rewards earned by your dwarves</string>
+           <string>Total block rewards earned by your votes</string>
           </property>
           <property name="text">
            <string>Rewards:</string>
@@ -1243,7 +1203,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="rewardsPaidLabel">
           <property name="toolTip">
-           <string>Total block rewards earned by your dwarves</string>
+           <string>Total block rewards earned by your votes</string>
           </property>
           <property name="text">
            <string>0</string>
@@ -1269,7 +1229,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="label_7">
           <property name="toolTip">
-           <string>Total profit made by your dwarves</string>
+           <string>Total profit made by your votes</string>
           </property>
           <property name="text">
            <string>Profit:</string>
@@ -1282,7 +1242,7 @@ your hive's chance of mining any given hivemineable block.</string>
         <item>
          <widget class="QLabel" name="profitLabel">
           <property name="toolTip">
-           <string>Total profit made by your dwarves</string>
+           <string>Total profit made by your votes</string>
           </property>
           <property name="text">
            <string>0</string>
