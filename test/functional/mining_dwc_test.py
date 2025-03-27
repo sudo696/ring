@@ -16,8 +16,41 @@ class DWCMiningTest(RingTestFramework):
     def run_test(self):
         node = self.nodes[0]
         
+        # Test RandomX mining
+        self.log.info("Testing RandomX mining...")
+        
+        # Get block template
+        template = node.getblocktemplate({'rules': ['segwit']})
+        
+        # Create block
+        block = create_block(int(template['previousblockhash'], 16),
+                           create_coinbase(template['height']),
+                           template['curtime'])
+        
+        # Solve block with RandomX
+        block.solve()
+        
+        # Submit and verify
+        ret = node.submitblock(hexdata=b2x(block.serialize()))
+        assert_equal(ret, None)
+        assert_equal(node.getbestblockhash(), block.hash)
+        
+        self.log.info("RandomX mining test passed")
+        
         # Test basic mining info
         mining_info = node.getmininginfo()
+
+    def test_randomx_config(self):
+        """Test RandomX configuration"""
+        node = self.nodes[0]
+        
+        mining_info = node.getmininginfo()
+        assert_equal(mining_info['pow_algo'], 'randomx')
+        
+        # Verify RandomX parameters
+        assert_equal(mining_info['randomx_init'], True)
+        assert_equal(mining_info['randomx_mode'], 'fast') 
+
         assert_equal(mining_info['blocks'], 0)  # Should be 0 on clean chain
         assert mining_info['currentblocktx'] == 0
         assert mining_info['currentblockweight'] == 4000
