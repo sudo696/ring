@@ -20,6 +20,7 @@
 #include <logging.h>            // Ring-fork: Hive
 #include <key_io.h>             // Ring-fork: Hive
 #include <crypto/pop/game0/game0.h>   // Ring-fork: Pop
+#include <randomx.h> // Include RandomX header
 
 DwarfPopGraphPoint dwarfPopGraph[1024*40];       // Ring-fork: Hive
 
@@ -171,7 +172,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
 bool GetNetworkHiveInfo(int& immatureDwarves, int& immatureDCTs, int& matureDwarves, int& matureDCTs, CAmount& potentialLifespanRewards, const Consensus::Params& consensusParams, bool recalcGraph) {
     int totalDwarfLifespan = consensusParams.dwarfLifespanBlocks + consensusParams.dwarfGestationBlocks;
     immatureDwarves = immatureDCTs = matureDwarves = matureDCTs = 0;
-    
+
     CBlockIndex* pindexPrev = chainActive.Tip();
     assert(pindexPrev != nullptr);
     int tipHeight = pindexPrev->nHeight;
@@ -201,7 +202,7 @@ bool GetNetworkHiveInfo(int& immatureDwarves, int& immatureDCTs, int& matureDwar
             LogPrintf("! GetNetworkHiveInfo: Warn: Block not available (pruned data); can't calculate network dwarf count.");
             return false;
         }
-        
+
         if (!pindexPrev->GetBlockHeader().IsHiveMined(consensusParams)      // Don't check Hivemined blocks (no DCTs will be found in them)
             && !pindexPrev->GetBlockHeader().IsPopMined(consensusParams)    // Ring-fork: Pop: Same for pop blocks
         ) {
@@ -233,19 +234,6 @@ bool GetNetworkHiveInfo(int& immatureDwarves, int& immatureDCTs, int& matureDwar
 
                         // Add these dwarves to pop graph
                         if (recalcGraph) {
-                            /*
-                            int dwarfStart = blockHeight + consensusParams.dwarfGestationBlocks;
-                            int dwarfStop = dwarfStart + consensusParams.dwarfLifespanBlocks;
-                            dwarfStart -= tipHeight;
-                            dwarfStop -= tipHeight;
-                            for (int j = dwarfStart; j < dwarfStop; j++) {
-                                if (j > 0 && j < totalDwarfLifespan) {
-                                    if (i < consensusParams.dwarfGestationBlocks) // THIS IS WRONG
-                                        dwarfPopGraph[j].immaturePop += dwarfCount;
-                                    else
-                                        dwarfPopGraph[j].maturePop += dwarfCount;
-                                }
-                            }*/
                             int dwarfBornBlock = blockHeight;
                             int dwarfMaturesBlock = dwarfBornBlock + consensusParams.dwarfGestationBlocks;
                             int dwarfDiesBlock = dwarfMaturesBlock + consensusParams.dwarfLifespanBlocks;
@@ -324,7 +312,7 @@ bool CheckHiveProof(const CBlock* pblock, const Consensus::Params& consensusPara
                 LogPrintf("CheckHiveProof: Hivemined block contains DCTs!\n");
                 return false;
             }
-    
+
     // Coinbase tx must be valid
     CTransactionRef txCoinbase = pblock->vtx[0];
     //LogPrintf("CheckHiveProof: Got coinbase tx: %s\n", txCoinbase->ToString());
@@ -395,7 +383,7 @@ bool CheckHiveProof(const CBlock* pblock, const Consensus::Params& consensusPara
     std::vector<unsigned char> messageSig(&txCoinbase->vout[0].scriptPubKey[79], &txCoinbase->vout[0].scriptPubKey[79 + 65]);
     if (verbose)
         LogPrintf("CheckHiveProof: messageSig          = %s\n", HexStr(&messageSig[0], &messageSig[messageSig.size()]));
-    
+
     // Grab the reward address from the reward vout
     CTxDestination rewardDestination;
     if (!ExtractDestination(txCoinbase->vout[1].scriptPubKey, rewardDestination)) {
@@ -549,7 +537,7 @@ bool CheckHiveProof(const CBlock* pblock, const Consensus::Params& consensusPara
         LogPrintf("CheckHiveProof: dctValue            = %i\n", dctValue);
         LogPrintf("CheckHiveProof: dwarfCount          = %i\n", dwarfCount);
     }
-    
+
     // Check enough dwarves were bought to include claimed dwarfNonce
     if (dwarfNonce >= dwarfCount) {
         LogPrintf("CheckHiveProof: DCT did not create enough dwarves for claimed nonce!\n");
@@ -630,7 +618,7 @@ bool CheckPopProof(const CBlock* pblock, const Consensus::Params& consensusParam
     std::string gameSourceHashStr = gameSourceHashBin.ToString();
     if (verbose)
         LogPrintf("CheckPopProof: gameSourceHash       = %s\n", gameSourceHashStr);
- 
+
     // Get public/private claim
     bool isPrivate = txCoinbase->vout[0].scriptPubKey[36] == OP_TRUE;
     if (verbose)
@@ -751,4 +739,38 @@ bool CheckPopProof(const CBlock* pblock, const Consensus::Params& consensusParam
     if (verbose)
         LogPrintf("CheckPopProof: Pass at %i\n", blockHeight);
     return true;
+}
+
+bool static ScanHash(CBlockHeader *pblock, uint32_t& nNonce, uint256 *phash) {
+    uint256 hash;
+    while (true) {
+        nNonce++;
+
+        pblock->nNonce = nNonce;
+
+        // Generate block header data for hashing
+        CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+        ss << *pblock;
+        std::vector<unsigned char> blockData(ss.begin(), ss.end());
+
+        // Calculate RandomX hash
+        randomx_vm* vm = randomx_create_vm(RANDOMX_FLAG_DEFAULT, nullptr, nullptr);
+        if (vm == nullptr) return false;
+
+        uint64_t seed[4];
+        memcpy(seed, blockData.data(), sizeof(seed));
+        randomx_calculate_hash(vm, blockData.data(), blockData.size(), hash.begin());
+        randomx_destroy_vm(vm);
+
+        if (hash.ByteAt(31) == 0 && hash.ByteAt(30) == 0) {
+            memcpy(phash, &hash, 32);
+            return true;
+        }
+
+        if ((nNonce & 0xffff) == 0)
+            return false;
+
+        if ((nNonce & 0xfff) == 0)
+            boost::this_thread::interruption_point();
+    }
 }
