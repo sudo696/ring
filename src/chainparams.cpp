@@ -121,9 +121,11 @@ public:
         consensus.nTotalSupply = 9000000 * COIN;           // 900万枚总量
         consensus.nBurnBlockConfirmations = 5;             // 提前5个区块燃烧
         consensus.nRNGBlockSpacing = 5;                    // 每5个区块产生1枚
-        consensus.nMinBurnAmount = 1 * COIN;               // 最小燃烧1 DWC
+        consensus.nMinBurnAmount = 0.01 * COIN;            // 最小燃烧0.01 DWC
         consensus.nBurnVoteRatio = 100;                    // 0.01 DWC = 1票
         consensus.blockSubsidyRNG = 1 * COIN;              // 每次产出1枚RNG
+        consensus.nMinRNGAmount = 1 * COIN;                // RNG最小单位1枚
+        consensus.nMinDWCAmount = 0.01 * COIN;             // DWC最小单位0.01枚
 
 
         // Ring-fork: Hive: Consensus Fields
