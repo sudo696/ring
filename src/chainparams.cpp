@@ -114,7 +114,10 @@ public:
         consensus.lastInitialDistributionHeight = LAST_ID_HEIGHT;                                                                   // Height of last block containing initial distribution payouts to foreign coins
         consensus.powLimitInitialDistribution = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");       // Lower-than-powLimit difficulty for initial distribution blocks only
         consensus.slowStartBlocks = 2000;                                                                                           // Scale initial block reward up over this many blocks
-        consensus.blockSubsidyPow = 25 * COIN;
+        consensus.nPowTargetSpacing = 300;                                                                                         // 5 minutes per block
+        consensus.nSubsidyDecreaseInterval = 950000;                                                                               // Decrease subsidy every 950000 blocks
+        consensus.nMinSubsidy = 1 * COIN;                                                                                          // Minimum subsidy is 1 DWC
+        consensus.blockSubsidyPow = 25 * COIN;                                                                                     // Initial block reward
         consensus.blockSubsidyHive = 1 * COIN;
         consensus.blockSubsidyPopPrivate = 0.2 * COIN;
         consensus.blockSubsidyPopPublic = 0.05 * COIN;

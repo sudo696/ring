@@ -4,6 +4,7 @@ modules = ["cpp-clang14", "c-clang14", "python-3.12"]
 channel = "stable-24_05"
 
 [workflows]
+runButton = "Run Mining Test"
 
 [[workflows.workflow]]
 name = "Run Mining Test"

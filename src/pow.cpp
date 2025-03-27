@@ -557,3 +557,20 @@ bool static ScanHash(CBlockHeader *pblock, uint32_t& nNonce, uint256 *phash) {
             boost::this_thread::interruption_point();
     }
 }
+CAmount GetBlockSubsidyPow(int nHeight, const Consensus::Params& consensusParams)
+{
+    CAmount nSubsidy = consensusParams.blockSubsidyPow;
+    
+    // Calculate how many times we need to decrease the subsidy
+    int decreases = nHeight / consensusParams.nSubsidyDecreaseInterval;
+    
+    // Decrease subsidy by 1 DWC for each interval
+    nSubsidy -= decreases * COIN;
+    
+    // Don't go below minimum subsidy
+    if (nSubsidy < consensusParams.nMinSubsidy) {
+        nSubsidy = consensusParams.nMinSubsidy;
+    }
+    
+    return nSubsidy;
+}
