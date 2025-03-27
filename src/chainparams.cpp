@@ -121,8 +121,8 @@ public:
 
         // Ring-fork: Hive: Consensus Fields
         consensus.dwarfCost = 0.01 * COIN;                  // Cost of a dwarf
-        consensus.dwarfCreationAddress = "RNGSummonADwarvenMiningArmyXYzDNsz";  // Unspendable address for dwarf creation
-        consensus.hiveCommunityAddress = "RNGBEERnxAdgdRfSa45NFy5bZfQPYbztkn";  // Community fund address
+        consensus.dwarfCreationAddress = "DWCSummonADwarvenMiningArmyXYzDNsz";  // Unspendable address for dwarf creation
+        consensus.hiveCommunityAddress = "DWCBEERnxAdgdRfSa45NFy5bZfQPYbztkn";  // Community fund address
         consensus.communityContribFactor = 5;               // Optionally, donate dct_value/maxCommunityContribFactor to community fund
         consensus.dwarfGestationBlocks = 2880;              // The number of blocks for a new dwarf to mature (approx 24 hours)
         consensus.dwarfLifespanBlocks = 30000;              // The number of blocks a dwarf lives for after maturation (approx 10 days)
@@ -190,7 +190,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
-        bech32_hrp = "rng";
+        bech32_hrp = "dwc";
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
@@ -277,8 +277,8 @@ public:
 
         // Ring-fork: Hive: Consensus Fields
         consensus.dwarfCost = 0.01 * COIN;                  // Cost of a dwarf
-        consensus.dwarfCreationAddress = "SUmmonTheTestnetDwarvenArmyXaNdvvm";  // Unspendable address for dwarf creation
-        consensus.hiveCommunityAddress = "SW4fmbrApQcUhDd2RtVsRVts7ptizk39C9";  // Community fund address
+        consensus.dwarfCreationAddress = "TDWCSummonTheDwarvenArmyXaNdvvm";  // Unspendable address for dwarf creation
+        consensus.hiveCommunityAddress = "TDWC4fmbrApQcUhDd2RtVsRVts7ptizk39C9";  // Community fund address
         consensus.communityContribFactor = 5;               // Optionally, donate dct_value/maxCommunityContribFactor to community fund
         consensus.dwarfGestationBlocks = 720;               // The number of blocks for a new dwarf to mature (approx 24 hours)
         consensus.dwarfLifespanBlocks = 30000;              // The number of blocks a dwarf lives for after maturation (approx 10 days)
@@ -335,7 +335,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
-        bech32_hrp = "trng";
+        bech32_hrp = "tdwc";
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
