@@ -427,8 +427,7 @@ void RingGUI::createActions()
     connect(hiveAction, &QAction::triggered, this, &RingGUI::gotoHivePage);                 // Ring-fork: Hive: Connect actions
     connect(popAction, &QAction::triggered, [this]{ showNormalIfMinimized(); });            // Ring-fork: Pop: Connect actions
     connect(popAction, &QAction::triggered, this, &RingGUI::gotoPopPage);                   // Ring-fork: Pop: Connect actions
-    connect(rialtoAction, &QAction::triggered, [this]{ showNormalIfMinimized(); });         // Ring-fork: Rialto: Connect actions
-    connect(rialtoAction, &QAction::triggered, this, &RingGUI::gotoRialtoPage);             // Ring-fork: Rialto: Connect actions
+    
     connect(sendCoinsAction, &QAction::triggered, [this]{ showNormalIfMinimized(); });
     connect(sendCoinsAction, &QAction::triggered, [this]{ gotoSendCoinsPage(); });
     connect(sendCoinsMenuAction, &QAction::triggered, [this]{ showNormalIfMinimized(); });
@@ -1021,12 +1020,6 @@ void RingGUI::gotoHivePage()
 }
 
 // Ring-fork: Rialto page
-void RingGUI::gotoRialtoPage()
-{
-    rialtoAction->setChecked(true);
-    if (walletFrame) walletFrame->gotoRialtoPage();
-}
-
 // Ring-fork: Pop page
 void RingGUI::gotoPopPage()
 {
