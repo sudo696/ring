@@ -211,7 +211,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
 
         // vout[1]: Reward :)
         coinbaseTx.vout[1].scriptPubKey = scriptPubKeyIn;
-        
+
         // Ring-fork: Pop
         bool isPrivate = coinbaseTx.vout[0].scriptPubKey[36] == OP_TRUE;
         CAmount subsidy = isPrivate ? GetBlockSubsidyPopPrivate(chainparams.GetConsensus()) : GetBlockSubsidyPopPublic(chainparams.GetConsensus());
@@ -239,7 +239,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     // Fill in header
     pblock->hashPrevBlock  = pindexPrev->GetBlockHash();
     UpdateTime(pblock, chainparams.GetConsensus(), pindexPrev);
-    
+
     // Ring-fork: Hive: Choose correct nBits depending on whether a Hive block is requested
     // Ring-fork: Pop: Handle pop blocks too
     if (hiveProofScript)
@@ -617,6 +617,43 @@ void static MinerThread(const CChainParams& chainparams) {
             // Create a block
             unsigned int nTransactionsUpdatedLast = mempool.GetTransactionsUpdated();
             CBlockIndex* pindexPrev = chainActive.Tip();
+
+            // Check if this is an RNG block
+            if(pindexPrev->nHeight % chainparams.GetConsensus().nRNGBlockSpacing == 0) {
+                // Get valid burn transactions from 5 blocks ago
+                std::vector<CTxBurn> vBurns; // Placeholder:  Needs implementation to fetch burn transactions
+                CBlockIndex* pindexBurn = pindexPrev->GetAncestor(
+                    pindexPrev->nHeight - chainparams.GetConsensus().nBurnBlockConfirmations
+                );
+
+                // Calculate total burn amount and votes
+                CAmount totalBurned = 0;
+                uint64_t totalVotes = 0;
+                for(const auto& burn : vBurns) {
+                    if(burn.amount >= chainparams.GetConsensus().nMinBurnAmount) {
+                        totalBurned += burn.amount;
+                        totalVotes += burn.amount / chainparams.GetConsensus().nBurnVoteRatio;
+                    }
+                }
+
+                // Select winner using block hash as seed
+                uint256 blockHash = pindexPrev->GetBlockHash();
+                uint64_t rand = uint64_t(UintToArith256(blockHash));
+                uint64_t winningVote = rand % totalVotes;
+
+                // Find winning burn transaction
+                uint64_t voteCount = 0;
+                CTxBurn* winner = nullptr;
+                for(auto& burn : vBurns) {
+                    uint64_t votes = burn.amount / chainparams.GetConsensus().nBurnVoteRatio;
+                    if(voteCount <= winningVote && winningVote < voteCount + votes) {
+                        winner = &burn;
+                        break;
+                    }
+                    voteCount += votes;
+                }
+            }
+
             std::unique_ptr<CBlockTemplate> pblocktemplate(BlockAssembler(Params()).CreateNewBlock(coinbaseScript->reserveScript));
             if (!pblocktemplate.get())
                 throw std::runtime_error("Couldn't get block template. Probably keypool ran out; please call keypoolrefill before restarting the mining thread");
