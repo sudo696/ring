@@ -114,7 +114,7 @@ public:
         consensus.lastInitialDistributionHeight = LAST_ID_HEIGHT;                                                                   // Height of last block containing initial distribution payouts to foreign coins
         consensus.powLimitInitialDistribution = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");       // Lower-than-powLimit difficulty for initial distribution blocks only
         consensus.slowStartBlocks = 2000;                                                                                           // Scale initial block reward up over this many blocks
-        consensus.blockSubsidyPow = 0.2 * COIN;
+        consensus.blockSubsidyPow = 25 * COIN;
         consensus.blockSubsidyHive = 1 * COIN;
         consensus.blockSubsidyPopPrivate = 0.2 * COIN;
         consensus.blockSubsidyPopPublic = 0.05 * COIN;
@@ -271,7 +271,7 @@ public:
         consensus.lastInitialDistributionHeight = 2000;                                                                             // Height of last block containing initial distribution payouts to foreign coins
         consensus.powLimitInitialDistribution = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");       // Lower-than-powLimit difficulty for initial distribution blocks only
         consensus.slowStartBlocks = 400;                                                                                            // Scale initial block reward up over this many blocks      
-        consensus.blockSubsidyPow = 0.2 * COIN;
+        consensus.blockSubsidyPow = 25 * COIN;
         consensus.blockSubsidyHive = 1 * COIN;
         consensus.blockSubsidyPopPrivate = 0.2 * COIN;
         consensus.blockSubsidyPopPublic = 0.05 * COIN;
