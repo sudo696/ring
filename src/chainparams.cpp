@@ -66,13 +66,13 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = "main";
-        //consensus.nSubsidyHalvingInterval = 210000;   // No halving on chain
-        //consensus.BIP16Exception = uint256S("0x0");   // No BIP16 exception on chain
+        // DWC uses gradual reduction instead of halving
         consensus.BIP34Height = 100;
         consensus.BIP34Hash = uint256();                // Not needed; activated on unforkable block below initial distro end
         consensus.BIP65Height = 1;                      // BIP65 & 66 active since start
         consensus.BIP66Height = 1;
-        consensus.powLimit = uint256S("000000ffff000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit = uint256S("00000fffff00000000000000000000000000000000000000000000000000000"); // RandomX difficulty target
+        consensus.powAlgo = POW_RANDOMX;  // Use RandomX mining algorithm
         consensus.nPowTargetSpacing = 300;               // Targeting 1 pow block (3 blocks across all types) in this many seconds (5 minutes)
         consensus.nExpectedBlockSpacing = consensus.nPowTargetSpacing / 3;
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -223,13 +223,13 @@ class CTestNetParams : public CChainParams {
 public:
     CTestNetParams() {
         strNetworkID = "test";
-        //consensus.nSubsidyHalvingInterval = 210000;   // No halving on chain
-        //consensus.BIP16Exception = uint256S("0x0");   // No BIP16 exception on chain
+        // DWC uses gradual reduction instead of halving
         consensus.BIP34Height = 100;
         consensus.BIP34Hash = uint256();    // Not needed
         consensus.BIP65Height = 1;
         consensus.BIP66Height = 1;
-        consensus.powLimit = uint256S("000000ffff000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit = uint256S("00000fffff00000000000000000000000000000000000000000000000000000"); // RandomX difficulty target
+        consensus.powAlgo = POW_RANDOMX;  // Use RandomX mining algorithm
         consensus.nPowTargetSpacing = 90; // 90 secs
         consensus.nExpectedBlockSpacing = consensus.nPowTargetSpacing / 3;
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -369,8 +369,7 @@ class CRegTestParams : public CChainParams {
 public:
     explicit CRegTestParams(const ArgsManager& args) {
         strNetworkID = "regtest";
-        //consensus.nSubsidyHalvingInterval = 150;      // No halving on chain
-        //consensus.BIP16Exception = uint256S("0x0");   // No BIP16 exception on chain
+        // DWC uses gradual reduction instead of halving
         consensus.BIP34Height = 100; // BIP34 activated on regtest (Used in functional tests)
         consensus.BIP34Hash = uint256();    // Not needed
         consensus.BIP65Height = 1; // BIP65 activated on regtest (Used in functional tests)
