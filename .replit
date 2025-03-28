@@ -23,3 +23,30 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python3 test/functional/feature_rng_dwc_test.py"
+
+[[workflows.workflow]]
+name = "Base Test"
+author = 40780329
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 test/functional/feature_block.py"
+
+[[workflows.workflow]]
+name = "Mining Test"
+author = 40780329
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 test/functional/mining_basic.py"
+
+[[workflows.workflow]]
+name = "RNG Test"
+author = 40780329
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 test/functional/feature_rng_test.py"
