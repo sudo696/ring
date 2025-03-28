@@ -1177,14 +1177,20 @@ CAmount GetBlockSubsidyPow(int nHeight, const Consensus::Params& consensusParams
     if (nHeight <= consensusParams.lastInitialDistributionHeight)
         return MAX_MONEY;
 
-    // Enable standard flat subsidy
-    CAmount nSubsidy = consensusParams.blockSubsidyPow;
+    // Calculate reward reduction based on block height
+    int reductions = nHeight / consensusParams.nSubsidyHalvingInterval;
+    
+    // Check if we've reached maximum reduction times
+    if (reductions >= consensusParams.nSubsidyReductionTimes) {
+        return consensusParams.nSubsidyMinimum;
+    }
 
-    // Ring-fork: Slow-start the first n blocks to prevent early miners having an unfair advantage
-    int64_t blocksSinceInitialDistribution = nHeight - consensusParams.lastInitialDistributionHeight;
-    if (blocksSinceInitialDistribution < consensusParams.slowStartBlocks) {
-        CAmount incrementPerBlock = nSubsidy / consensusParams.slowStartBlocks;
-        nSubsidy = blocksSinceInitialDistribution * incrementPerBlock;
+    // Calculate current reward
+    CAmount nSubsidy = consensusParams.blockSubsidyPow - (reductions * COIN);
+    
+    // Don't go below minimum reward
+    if (nSubsidy < consensusParams.nSubsidyMinimum) {
+        nSubsidy = consensusParams.nSubsidyMinimum;
     }
 
     return nSubsidy;
