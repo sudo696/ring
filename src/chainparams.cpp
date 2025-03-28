@@ -121,10 +121,11 @@ public:
         consensus.blockSubsidyHive = 1 * COIN;
         consensus.blockSubsidyPopPrivate = 0.2 * COIN;
         consensus.blockSubsidyPopPublic = 0.05 * COIN;
-        consensus.nTotalSupply = MAX_MONEY;                // Unlimited total supply
-        consensus.nSubsidyHalvingInterval = 105000;       // Reward reduction every 105000 blocks
-        consensus.nSubsidyReductionTimes = 24;           // Number of reward reductions
-        consensus.nSubsidyMinimum = 1 * COIN;            // Minimum reward after reductions
+        consensus.nSubsidyHalvingInterval = 105000;                    // Reward reduction every 105000 blocks
+        consensus.nSubsidyReductionTimes = 24;                        // 一共经过24次减产
+        consensus.nPowTargetSpacing = 300;                            // 5分钟一个块
+        consensus.blockSubsidyPow = 25 * COIN;                        // 初始奖励25个
+        consensus.nSubsidyMinimum = 1 * COIN;                         // 最小奖励1个,减到1个后停止减少
         consensus.nBurnBlockConfirmations = 5;             // 提前5个区块燃烧
         consensus.nRNGBlockSpacing = 5;                    // 每5个区块产生1枚
         consensus.nMinBurnAmount = 0.01 * COIN;            // 最小燃烧0.01 DWC
