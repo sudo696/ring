@@ -115,13 +115,13 @@ public:
         consensus.powLimitInitialDistribution = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");       // Lower-than-powLimit difficulty for initial distribution blocks only
         consensus.slowStartBlocks = 2000;                                                                                           // Scale initial block reward up over this many blocks
         consensus.nPowTargetSpacing = 300;                                                                                         // 5 minutes per block
-        consensus.nSubsidyDecreaseInterval = 105000;                                                                               // Decrease subsidy every 105000 blocks
+        consensus.nSubsidyDecreaseInterval = 1050000;                                                                               // Decrease subsidy every 1050000 blocks (about 10 years)
         consensus.nMinSubsidy = 1 * COIN;                                                                                          // Minimum subsidy is 1 DWC
         consensus.blockSubsidyPow = 25 * COIN;                                                                                     // Initial block reward
         consensus.blockSubsidyHive = 1 * COIN;
         consensus.blockSubsidyPopPrivate = 0.2 * COIN;
         consensus.blockSubsidyPopPublic = 0.05 * COIN;
-        consensus.nSubsidyHalvingInterval = 105000;                    // Reward reduction every 105000 blocks
+        consensus.nSubsidyHalvingInterval = 1050000;                    // Reward reduction every 1050000 blocks (about 10 years)
         consensus.nSubsidyReductionTimes = 24;                        // 一共经过24次减产
         consensus.nPowTargetSpacing = 300;                            // 5分钟一个块
         consensus.blockSubsidyPow = 25 * COIN;                        // 初始奖励25个
